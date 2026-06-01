@@ -54,7 +54,7 @@ export default function MainPage() {
         setUpdatingTaskId(taskId)
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
-                method: 'Post',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 }
