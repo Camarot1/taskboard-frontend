@@ -40,8 +40,8 @@ export default function MainPage() {
             }
 
             const updatedTask = await response.json()
-            
-            setTasks(prevTasks =>  prevTasks.map(task => task.id === taskId  ? updatedTask : task ) )
+
+            setTasks(prevTasks => prevTasks.map(task => task.id === taskId ? updatedTask : task))
         } catch (error) {
             console.error('Error updating status:', error)
             alert('Ошибка при обновлении статуса')
@@ -51,6 +51,10 @@ export default function MainPage() {
     }
 
     const handleArchiveTask = async (taskId) => {
+        if (!window.confirm(`Вы уверены, что хотите отправить задачу в архив?`)) {
+            return;
+        }
+
         setUpdatingTaskId(taskId)
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
@@ -84,81 +88,84 @@ export default function MainPage() {
     }
 
     return (
-        <div style={{ display: 'flex', gap: '20px', padding: '20px' }}>
-            <div style={{ flex: 1 }}>
-                <h2>To-Do</h2>
-                {todoTasks.length === 0 ? (
-                    <div>Нет задач</div>
-                ) : (
-                    todoTasks.map(item => (
-                        <div key={item.id}>
-                            <h3>{item.title}</h3>
-                            <p>{item.description}</p>
-                            <p>ID пользователя: {item.user_id}</p>
-                            <button 
-                                onClick={() => handleStatusChange(item.id, 'in-progress')}
-                                disabled={updatingTaskId === item.id}
-                            >
-                                {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
-                            </button>
-                        </div>
-                    ))
-                )}
-            </div>
-
-            <div style={{ flex: 1 }}>
-                <h2>In Progress</h2>
-                {inProgressTasks.length === 0 ? (
-                    <div>Нет задач</div>
-                ) : (
-                    inProgressTasks.map(item => (
-                        <div key={item.id}>
-                            <h3>{item.title}</h3>
-                            <p>{item.description}</p>
-                            <p>ID пользователя: {item.user_id}</p>
-                            <div style={{ display: 'flex', gap: '10px' }}>
-                                <button 
-                                    onClick={() => handleStatusChange(item.id, 'todo')}
-                                    disabled={updatingTaskId === item.id}
-                                >
-                                    Назад
-                                </button>
-                                <button 
-                                    onClick={() => handleStatusChange(item.id, 'done')}
-                                    disabled={updatingTaskId === item.id}
-                                >
-                                    Завершить
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
-
-            <div style={{ flex: 1 }}>
-                <h2>Done</h2>
-                {doneTasks.length === 0 ? (
-                    <div>Нет задач</div>
-                ) : (
-                    doneTasks.map(item => (
-                        <div key={item.id}>
-                            <h3>{item.title}</h3>
-                            <p>{item.description}</p>
-                            <p>ID пользователя: {item.user_id}</p>
-                            <div style={{ display: 'flex', gap: '10px' }}>
-                                <button 
+        <div className='main-page'>
+            <div className="tasks__column">
+                <p>To-Do</p>
+                <div className="tasks">
+                    {todoTasks.length === 0 ? (
+                        <div>Нет задач</div>
+                    ) : (
+                        todoTasks.map(item => (
+                            <div className="task" key={item.id}>
+                                <p>{item.title}</p>
+                                <p>{item.description}</p>
+                                <p>ID пользователя: {item.user_id}</p>
+                                <button
                                     onClick={() => handleStatusChange(item.id, 'in-progress')}
                                     disabled={updatingTaskId === item.id}
                                 >
-                                    Вернуть
+                                    {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
                                 </button>
-                                <button onClick={() => handleArchiveTask(item.id)}
-                                    disabled={updatingTaskId === item.id}>Архив</button>
                             </div>
-                        </div>
-                    ))
-                )}
+                        ))
+                    )}</div>
             </div>
-        </div>
+
+            <div className="tasks__column">
+                <p>In Progress</p>
+                <div className="tasks">
+                    {inProgressTasks.length === 0 ? (
+                        <div>Нет задач</div>
+                    ) : (
+                        inProgressTasks.map(item => (
+                            <div className="task" key={item.id}>
+                                <p>{item.title}</p>
+                                <p>{item.description}</p>
+                                <p>ID пользователя: {item.user_id}</p>
+                                <div className="button-block">
+                                    <button
+                                        onClick={() => handleStatusChange(item.id, 'todo')}
+                                        disabled={updatingTaskId === item.id}
+                                    >
+                                        Назад
+                                    </button>
+                                    <button
+                                        onClick={() => handleStatusChange(item.id, 'done')}
+                                        disabled={updatingTaskId === item.id}
+                                    >
+                                        Завершить
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}</div>
+            </div>
+            <div className="tasks__column">
+                <p>Done</p>
+                <div className="tasks">
+                    {doneTasks.length === 0 ? (
+                        <div>Нет задач</div>
+                    ) : (
+
+                        doneTasks.map(item => (
+                            <div className="task" key={item.id}>
+                                <p>{item.title}</p>
+                                <p>{item.description}</p>
+                                <p>ID пользователя: {item.user_id}</p>
+                                <div className="button-block">
+                                    <button
+                                        onClick={() => handleStatusChange(item.id, 'in-progress')}
+                                        disabled={updatingTaskId === item.id}
+                                    >
+                                        Вернуть
+                                    </button>
+                                    <button onClick={() => handleArchiveTask(item.id)}
+                                        disabled={updatingTaskId === item.id}>Архив</button>
+                                </div>
+                            </div>
+                        ))
+                    )}</div>
+            </div>
+        </div >
     )
 }

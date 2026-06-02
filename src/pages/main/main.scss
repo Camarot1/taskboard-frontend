@@ -1,3 +1,73 @@
-*{
+@mixin column {
+    display: flex;
+    flex-direction: column;
+}
+
+
+* {
     color: black;
+}
+
+li {
+    list-style-type: none;
+}
+
+button {
+    outline: none;
+    background: none;
+    border: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.main-page {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: space-around;
+
+    .tasks__column {
+        @include column;
+        align-items: center;
+        gap: 15px;
+
+        .tasks {
+            @include column;
+            gap: 20px;
+
+            .task {
+                border: 1px solid black;
+                border-radius: 15px;
+                padding: 10px;
+                @include column;
+                gap: 5px;
+
+                button {
+                    border-bottom: 1px solid black;
+                }
+            }
+        }
+
+        * {
+            text-align: center;
+        }
+    }
+
+    .button-block {
+        display: flex;
+        align-self: center;
+        justify-content: center;
+        gap: 15px;
+
+        * {
+            border-bottom: 1px solid black;
+        }
+    }
+
 }
