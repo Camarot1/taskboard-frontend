@@ -90,17 +90,17 @@ export default function MainPage() {
     return (
         <div className='main-page'>
             <div className="tasks__column">
-                <p>To-Do</p>
+                <p className="column__title">To-Do</p>
                 <div className="tasks">
                     {todoTasks.length === 0 ? (
                         <div>Нет задач</div>
                     ) : (
                         todoTasks.map(item => (
                             <div className="task" key={item.id}>
-                                <p>{item.title}</p>
-                                <p>{item.description}</p>
-                                <p>ID пользователя: {item.user_id}</p>
-                                <button
+                                <p className="title">{item.title}</p>
+                                <p className = "desc">{item.description}</p>
+                                <p className = "id">ID пользователя: {item.user_id}</p>
+                                <button className="button-block"
                                     onClick={() => handleStatusChange(item.id, 'in-progress')}
                                     disabled={updatingTaskId === item.id}
                                 >
@@ -112,16 +112,16 @@ export default function MainPage() {
             </div>
 
             <div className="tasks__column">
-                <p>In Progress</p>
+                <p className="column__title">In Progress</p>
                 <div className="tasks">
                     {inProgressTasks.length === 0 ? (
                         <div>Нет задач</div>
                     ) : (
                         inProgressTasks.map(item => (
                             <div className="task" key={item.id}>
-                                <p>{item.title}</p>
-                                <p>{item.description}</p>
-                                <p>ID пользователя: {item.user_id}</p>
+                                <p className="title">{item.title}</p>
+                                <p className = "desc">{item.description}</p>
+                                <p className = "id">ID пользователя: {item.user_id}</p>
                                 <div className="button-block">
                                     <button
                                         onClick={() => handleStatusChange(item.id, 'todo')}
@@ -141,7 +141,7 @@ export default function MainPage() {
                     )}</div>
             </div>
             <div className="tasks__column">
-                <p>Done</p>
+                <p className="column__title">Done</p>
                 <div className="tasks">
                     {doneTasks.length === 0 ? (
                         <div>Нет задач</div>
@@ -149,9 +149,9 @@ export default function MainPage() {
 
                         doneTasks.map(item => (
                             <div className="task" key={item.id}>
-                                <p>{item.title}</p>
-                                <p>{item.description}</p>
-                                <p>ID пользователя: {item.user_id}</p>
+                                <p className="title">{item.title}</p>
+                                <p className = "desc">{item.description}</p>
+                                <p className = "id">ID пользователя: {item.user_id}</p>
                                 <div className="button-block">
                                     <button
                                         onClick={() => handleStatusChange(item.id, 'in-progress')}

@@ -2,10 +2,11 @@
     display: flex;
     flex-direction: column;
 }
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
     color: black;
+    font-family: Montserrat;
 }
 
 li {
@@ -30,12 +31,20 @@ a {
 .main-page {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 100vh;
     justify-content: space-around;
+    margin-top: 20px;
+
+    .column__title{
+        font-size: 25px;
+        font-weight: 500
+    }
 
     .tasks__column {
         @include column;
         align-items: center;
         gap: 15px;
+        border-left: 1px solid black;
 
         .tasks {
             @include column;
