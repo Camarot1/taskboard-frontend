@@ -116,7 +116,7 @@ export default function MainPage() {
                                 ))
                             )}</div>
                     </div>
-
+                    
                     <div className="tasks__column">
                         <p className="column__title">In Progress</p>
                         <div className="tasks">
@@ -133,7 +133,7 @@ export default function MainPage() {
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
                                                 disabled={updatingTaskId === item.id}
                                             >
-                                                Назад
+                                            Назад
                                             </button>
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'done')}
@@ -144,7 +144,8 @@ export default function MainPage() {
                                         </div>
                                     </div>
                                 ))
-                            )}</div>
+                            )}
+                            </div>
                     </div>
                     <div className="tasks__column">
                         <p className="column__title">Done</p>
