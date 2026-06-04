@@ -1,16 +1,18 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import MainPage from './pages/main/main.jsx'
+import AddPage from './pages/addTask/addTask.jsx'
 
 export default function App() {
     return (
         <BrowserRouter>
             <div className="App">
-                <main>
+
                     <Routes>
                         <Route path="/" element={<MainPage />} />
+                        <Route path="/add" element={<AddPage />} />
                     </Routes>
-                </main>
+
             </div>
         </BrowserRouter>
     )

@@ -88,84 +88,88 @@ export default function MainPage() {
     }
 
     return (
-        <div className='main-page'>
-            <div className="tasks__column">
-                <p className="column__title">To-Do</p>
-                <div className="tasks">
-                    {todoTasks.length === 0 ? (
-                        <div>Нет задач</div>
-                    ) : (
-                        todoTasks.map(item => (
-                            <div className="task" key={item.id}>
-                                <p className="title">{item.title}</p>
-                                <p className = "desc">{item.description}</p>
-                                <p className = "id">ID пользователя: {item.user_id}</p>
-                                <button className="button-block"
-                                    onClick={() => handleStatusChange(item.id, 'in-progress')}
-                                    disabled={updatingTaskId === item.id}
-                                >
-                                    {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
-                                </button>
-                            </div>
-                        ))
-                    )}</div>
-            </div>
+        <main className='main-page'>
+            <div className="main__container">
+                <div className="main__tasks">
+                    <div className="tasks__column">
+                        <p className="column__title">To-Do</p>
+                        <div className="tasks">
+                            {todoTasks.length === 0 ? (
+                                <div>Нет задач</div>
+                            ) : (
+                                todoTasks.map(item => (
+                                    <div className="task" key={item.id}>
+                                        <p className="title">{item.title}</p>
+                                        <p className="desc">{item.description}</p>
+                                        <p className="id">ID пользователя: {item.user_id}</p>
+                                        <button className="button-block"
+                                            onClick={() => handleStatusChange(item.id, 'in-progress')}
+                                            disabled={updatingTaskId === item.id}
+                                        >
+                                            {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
+                                        </button>
+                                    </div>
+                                ))
+                            )}</div>
+                    </div>
 
-            <div className="tasks__column">
-                <p className="column__title">In Progress</p>
-                <div className="tasks">
-                    {inProgressTasks.length === 0 ? (
-                        <div>Нет задач</div>
-                    ) : (
-                        inProgressTasks.map(item => (
-                            <div className="task" key={item.id}>
-                                <p className="title">{item.title}</p>
-                                <p className = "desc">{item.description}</p>
-                                <p className = "id">ID пользователя: {item.user_id}</p>
-                                <div className="button-block">
-                                    <button
-                                        onClick={() => handleStatusChange(item.id, 'todo')}
-                                        disabled={updatingTaskId === item.id}
-                                    >
-                                        Назад
-                                    </button>
-                                    <button
-                                        onClick={() => handleStatusChange(item.id, 'done')}
-                                        disabled={updatingTaskId === item.id}
-                                    >
-                                        Завершить
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    )}</div>
-            </div>
-            <div className="tasks__column">
-                <p className="column__title">Done</p>
-                <div className="tasks">
-                    {doneTasks.length === 0 ? (
-                        <div>Нет задач</div>
-                    ) : (
+                    <div className="tasks__column">
+                        <p className="column__title">In Progress</p>
+                        <div className="tasks">
+                            {inProgressTasks.length === 0 ? (
+                                <div>Нет задач</div>
+                            ) : (
+                                inProgressTasks.map(item => (
+                                    <div className="task" key={item.id}>
+                                        <p className="title">{item.title}</p>
+                                        <p className="desc">{item.description}</p>
+                                        <p className="id">ID пользователя: {item.user_id}</p>
+                                        <div className="button-block">
+                                            <button
+                                                onClick={() => handleStatusChange(item.id, 'todo')}
+                                                disabled={updatingTaskId === item.id}
+                                            >
+                                                Назад
+                                            </button>
+                                            <button
+                                                onClick={() => handleStatusChange(item.id, 'done')}
+                                                disabled={updatingTaskId === item.id}
+                                            >
+                                                Завершить
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}</div>
+                    </div>
+                    <div className="tasks__column">
+                        <p className="column__title">Done</p>
+                        <div className="tasks">
+                            {doneTasks.length === 0 ? (
+                                <div>Нет задач</div>
+                            ) : (
 
-                        doneTasks.map(item => (
-                            <div className="task" key={item.id}>
-                                <p className="title">{item.title}</p>
-                                <p className = "desc">{item.description}</p>
-                                <p className = "id">ID пользователя: {item.user_id}</p>
-                                <div className="button-block">
-                                    <button
-                                        onClick={() => handleStatusChange(item.id, 'in-progress')}
-                                        disabled={updatingTaskId === item.id}
-                                    >
-                                        Вернуть
-                                    </button>
-                                    <button onClick={() => handleArchiveTask(item.id)}
-                                        disabled={updatingTaskId === item.id}>Архив</button>
-                                </div>
-                            </div>
-                        ))
-                    )}</div>
+                                doneTasks.map(item => (
+                                    <div className="task" key={item.id}>
+                                        <p className="title">{item.title}</p>
+                                        <p className="desc">{item.description}</p>
+                                        <p className="id">ID пользователя: {item.user_id}</p>
+                                        <div className="button-block">
+                                            <button
+                                                onClick={() => handleStatusChange(item.id, 'in-progress')}
+                                                disabled={updatingTaskId === item.id}
+                                            >
+                                                Вернуть
+                                            </button>
+                                            <button onClick={() => handleArchiveTask(item.id)}
+                                                disabled={updatingTaskId === item.id}>Архив</button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}</div>
+                    </div>
+                </div>
             </div>
-        </div >
+        </main >
     )
 }
