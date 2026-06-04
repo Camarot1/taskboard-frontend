@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: column;
 }
+
+$border: 1px solid black;
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
@@ -28,6 +31,16 @@ a {
     padding: 0;
 }
 
+.main__container{
+    display: flex;
+    flex-direction: column;
+    padding: 2vh 0;
+}
+
+.main__title {
+    align-self: center;
+}
+
 .main__tasks {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -35,7 +48,9 @@ a {
     justify-content: space-around;
     margin-top: 20px;
 
-    .column__title{
+
+
+    .column__title {
         font-size: 25px;
         font-weight: 500
     }
@@ -44,21 +59,22 @@ a {
         @include column;
         align-items: center;
         gap: 15px;
-        border-left: 1px solid black;
+        border-left: 2.5px solid black;
+        border-top: $border;
+        padding-top: 15px;
 
         .tasks {
             @include column;
             gap: 20px;
-
             .task {
-                border: 1px solid black;
+                border: $border;
                 border-radius: 15px;
                 padding: 10px;
                 @include column;
                 gap: 5px;
-
+                box-shadow: 3px 3px 0 0 rgba(0,0,0, 0.3);
                 button {
-                    border-bottom: 1px solid black;
+                    border-bottom: $border;
                 }
             }
         }

@@ -10,7 +10,7 @@ export default function App() {
 
                     <Routes>
                         <Route path="/" element={<MainPage />} />
-                        <Route path="/add" element={<AddPage />} />
+                        <Route path="/addTask" element={<AddPage />} />
                     </Routes>
 
             </div>

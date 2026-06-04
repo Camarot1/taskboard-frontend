@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react"
 import './main.scss'
+import { useNavigate } from 'react-router-dom'
 export default function MainPage() {
 
     const [loading, setLoading] = useState(true)
     const [tasks, setTasks] = useState([])
     const [updatingTaskId, setUpdatingTaskId] = useState(null)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadData = async () => {
@@ -90,6 +92,8 @@ export default function MainPage() {
     return (
         <main className='main-page'>
             <div className="main__container">
+                <h1 className="main__title">Задачи</h1>
+                <button onClick={() => navigate('/addTask')}>Добавить задачу</button>
                 <div className="main__tasks">
                     <div className="tasks__column">
                         <p className="column__title">To-Do</p>
