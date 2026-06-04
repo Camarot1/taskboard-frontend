@@ -30,25 +30,29 @@ a {
     align-items: center;
 }
 
-.main__container {
-    @include center;
-
-    .main__form {
+.addTask-page {
+    .main__container {
         @include center;
-        gap:15px;
-        .form__group {
+
+        .main__form {
             @include center;
-            input{
-                box-shadow: 3px 3px 0 0 rgba(0,0,0, 0.3);
+            gap: 15px;
+
+            .form__group {
+                @include center;
+
+                input {
+                    box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.3);
+                }
             }
         }
-    }
 
-    .form__button {
-        align-self: center;
-        padding: 10px 15px;
-        border: 1px solid black;
-        border-radius: 10px;
-        box-shadow: 3px 3px 0 0 rgba(0,0,0, 0.3);
+        .form__button {
+            align-self: center;
+            padding: 10px 15px;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.3);
+        }
     }
 }

@@ -93,7 +93,6 @@ export default function MainPage() {
         <main className='main-page'>
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
-                <button onClick={() => navigate('/addTask')}>Добавить задачу</button>
                 <div className="main__tasks">
                     <div className="tasks__column">
                         <p className="column__title">To-Do</p>
@@ -116,7 +115,7 @@ export default function MainPage() {
                                 ))
                             )}</div>
                     </div>
-                    
+
                     <div className="tasks__column">
                         <p className="column__title">In Progress</p>
                         <div className="tasks">
