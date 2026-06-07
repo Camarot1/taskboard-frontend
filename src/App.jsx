@@ -1,8 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import MainPage from './pages/main/main.jsx'
+import TasksPage from './pages/tasks/tasks.jsx'
 import LoginPage from './pages/login/login.jsx'
 import AddPage from './pages/addTask/addTask.jsx'
+import MainPage from './pages/main.jsx'
+
 import Header from './pages/components/header.jsx'
 export default function App() {
     return (
@@ -10,7 +12,8 @@ export default function App() {
             <div className="App">
                     <Header/>
                     <Routes>
-                        <Route path="/" element={<MainPage />} />
+                        <Route path="/" element = {<MainPage />} />
+                        <Route path="/tasks" element={<TasksPage />} />
                         <Route path="/addTask" element={<AddPage />} />
                         <Route path="/login" element={<LoginPage />} />
                     </Routes>

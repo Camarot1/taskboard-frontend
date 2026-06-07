@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './addTask.scss'
-export default function AddTask() {
+import { usersData } from '../token'
 
+export default function AddTask() {
+    const navigate = useNavigate()
     const [Task, setTask] = useState([])
     const [formData, setFormData] = useState({
         user_id: '',
@@ -11,6 +14,13 @@ export default function AddTask() {
         status: 'todo',
         display_order: 1
     })
+
+    useEffect(() => {
+        const userDataFromToken = usersData()
+        if (!userDataFromToken) {
+            navigate("/login")
+        }
+    }, [navigate])
 
     const handleUpdate = async (e) => {
         const { name, value } = e.target
@@ -67,7 +77,7 @@ export default function AddTask() {
                         Добавить задачу
                     </button>
                 </form>
-                </div>
+            </div>
         </main>
     )
 }

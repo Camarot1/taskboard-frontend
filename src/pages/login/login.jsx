@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './login.scss'
-import { setToken} from "../token"
+import { setToken } from "../token"
 
 export default function Login() {
-
+    const navigate = useNavigate()
     const [Data, setData] = useState({
         login: '',
         password: ''
@@ -33,6 +34,7 @@ export default function Login() {
             })
             const data = await response.json()
             setToken(data.token)
+            navigate('/tasks')
             // const userDataToken = usersData()
             // if (userDataToken) {
             //     setUserData({
@@ -49,7 +51,9 @@ export default function Login() {
     return (
         <main className="login-page">
             <div className="main__container container">
-                <form className="main__form" onSubmit={Login}>
+                <form className="main__form" onSubmit={
+                    Login
+                }>
                     <div className="form__row">
                         <label >Логин</label>
                         <input type="text"

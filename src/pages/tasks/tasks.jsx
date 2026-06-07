@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
-import './main.scss'
+import './tasks.scss'
 import { useNavigate } from 'react-router-dom'
-import {usersData} from '../token'
-export default function MainPage() {
+import { usersData, deleteToken } from '../token'
+export default function TasksPage() {
 
     const [loading, setLoading] = useState(true)
     const [tasks, setTasks] = useState([])
@@ -13,11 +13,15 @@ export default function MainPage() {
     useEffect(() => {
         const loadData = async () => {
             const userDataFromToken = usersData()
-            await fetchTask(userDataFromToken.id)
-            setLoading(false)
+            if (!userDataFromToken) {
+                navigate("/login")
+            } else {
+                await fetchTask(userDataFromToken.id)
+                setLoading(false)
+            }
         }
         loadData()
-    }, [])
+    }, [navigate])
 
     const fetchTask = async (userId) => {
         try {
@@ -96,6 +100,11 @@ export default function MainPage() {
         <main className='main-page'>
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
+                <button className="main__button" onClick={()=> {
+                    deleteToken() 
+                    navigate('/login')}}>
+                    Выйти
+                </button>
                 <div className="main__tasks">
                     <div className="tasks__column">
                         <p className="column__title">To-Do</p>
@@ -135,7 +144,7 @@ export default function MainPage() {
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
                                                 disabled={updatingTaskId === item.id}
                                             >
-                                            Назад
+                                                Назад
                                             </button>
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'done')}
@@ -147,7 +156,7 @@ export default function MainPage() {
                                     </div>
                                 ))
                             )}
-                            </div>
+                        </div>
                     </div>
                     <div className="tasks__column">
                         <p className="column__title">Done</p>

@@ -9,7 +9,7 @@ export default function Header(){
     return(
         <header className='header'>
             <div className="header__container">
-                <button className="header__button" onClick={()=> navigate('/')}>Задачи</button>
+                <button className="header__button" onClick={()=> navigate('/tasks')}>Задачи</button>
                 <button className="header__button" onClick={()=> navigate('/addTask')}>Добавить</button>
                  <button className="header__button" onClick={()=> navigate('/login')}>Логин</button>
             </div>
