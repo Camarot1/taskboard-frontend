@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import './main.scss'
 import { useNavigate } from 'react-router-dom'
+import {usersData} from '../token'
 export default function MainPage() {
 
     const [loading, setLoading] = useState(true)
@@ -8,17 +9,19 @@ export default function MainPage() {
     const [updatingTaskId, setUpdatingTaskId] = useState(null)
     const navigate = useNavigate();
 
+
     useEffect(() => {
         const loadData = async () => {
-            await fetchTask()
+            const userDataFromToken = usersData()
+            await fetchTask(userDataFromToken.id)
             setLoading(false)
         }
         loadData()
     }, [])
 
-    const fetchTask = async () => {
+    const fetchTask = async (userId) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_URL}/tasks/1`)
+            const response = await fetch(`${process.env.REACT_APP_URL}/tasks/${userId}`)
             const data = await response.json()
             setTasks(data)
         } catch (error) {
