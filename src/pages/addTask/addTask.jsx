@@ -7,8 +7,8 @@ export default function AddTask() {
     const navigate = useNavigate()
     const [Task, setTask] = useState([])
     const [formData, setFormData] = useState({
-        user_id: '',
-        company_id: '',
+        username: '',
+        name: '',
         title: '',
         description: '',
         status: 'todo',
@@ -53,14 +53,14 @@ export default function AddTask() {
                 <h1 className="main__title">Добавить задачу</h1>
                 <form className="main__form" onSubmit={handleAddTask}>
                     <div className="form__group">
-                        <label >ID пользователя</label>
-                        <input type="text" name="user_id" className="form-style"
-                            value={formData.user_id} onChange={handleUpdate} />
+                        <label >Имя пользователя</label>
+                        <input type="text" name="username" className="form-style"
+                            value={formData.username} onChange={handleUpdate} />
                     </div>
                     <div className="form__group">
-                        <label >ID компании</label>
-                        <input type="text" name="company_id" className="form-style"
-                            value={formData.company_id} onChange={handleUpdate} />
+                        <label >Название компании</label>
+                        <input type="text" name="name" className="form-style"
+                            value={formData.name} onChange={handleUpdate} />
                     </div>
                     <div className="form__group">
                         <label >Заголовок</label>
