@@ -31,7 +31,7 @@ a {
     padding: 0;
 }
 
-.main__container{
+.main__container {
     display: flex;
     flex-direction: column;
     padding: 2vh 0;
@@ -39,6 +39,17 @@ a {
 
 .main__title {
     align-self: center;
+    font-size: 2em;
+}
+
+.main__button {
+    font-size: 1em;
+    border: $border;
+    align-self: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 15px;
+    margin-top:10px;
 }
 
 .main__tasks {
@@ -48,11 +59,10 @@ a {
     justify-content: space-around;
     margin-top: 20px;
 
-
-
     .column__title {
-        font-size: 25px;
-        font-weight: 500
+        font-size: 1.5em;
+        font-weight: 500;
+        border-bottom: $border;
     }
 
     .tasks__column {
@@ -66,16 +76,28 @@ a {
         .tasks {
             @include column;
             gap: 20px;
+
             .task {
-                border: $border;
+                border: 1px solid #dd9f9f;
                 border-radius: 15px;
                 padding: 10px;
                 @include column;
                 gap: 5px;
-                box-shadow: 3px 3px 0 0 rgba(0,0,0, 0.3);
+                box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.3);
+
                 button {
                     border-bottom: $border;
+                    cursor: pointer;
                 }
+            }
+
+            .title {
+                font-size: calc(1em + 5px);
+                margin-bottom: 5px;
+            }
+
+            .desk {
+                font-size: 1em;
             }
         }
 
