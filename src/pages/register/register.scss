@@ -1,0 +1,35 @@
+
+@mixin center{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@mixin shadow{
+    border-radius: 10px;
+    box-shadow: 3px 4px 0 rgba(0,0,0, 0.3)
+}
+.register-page{
+    .main__container{
+        @include center;
+        margin-top: 20px;
+    }
+    .main__form{
+        @include center;
+        gap: 10px;
+        button{
+            padding: 7px 13px;
+            cursor: pointer;
+            border: 1px solid black;
+            @include shadow;
+        }
+    }
+    .form__row{
+        @include center;
+        gap:10px;
+        input{
+            padding: 2px;
+            @include shadow;
+        }
+    }
+}
