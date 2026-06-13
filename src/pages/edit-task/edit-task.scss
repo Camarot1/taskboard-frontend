@@ -1,0 +1,37 @@
+@mixin center {
+    display: flex;
+    align-items: center;
+}
+
+.editTask-page {
+    .main__container {
+        display: flex;
+    }
+
+    .main__form {
+        align-self: center;
+        @include center;
+        flex-direction: column;
+        gap: 15px;
+        button{
+            box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid black;
+            padding: 10px 15px;
+            border-radius: 15px
+        }
+    }
+    .form__block {
+        @include center;
+        flex-direction: column;
+        gap: 10px;
+
+        textarea {
+            min-width: 20vw;
+            min-height: 15vh;
+        }
+        .textarea-small{
+            min-height: 5vh;
+        }
+    }
+
+}

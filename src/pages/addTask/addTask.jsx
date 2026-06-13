@@ -54,22 +54,22 @@ export default function AddTask() {
                 <form className="main__form" onSubmit={handleAddTask}>
                     <div className="form__group">
                         <label >Имя пользователя</label>
-                        <input type="text" name="username" className="form-style"
+                        <input type="text" name="username"
                             value={formData.username} onChange={handleUpdate} />
                     </div>
                     <div className="form__group">
                         <label >Название компании</label>
-                        <input type="text" name="name" className="form-style"
+                        <input type="text" name="name"
                             value={formData.name} onChange={handleUpdate} />
                     </div>
                     <div className="form__group">
                         <label >Заголовок</label>
-                        <input type="text" name="title" className="form-style"
+                        <textarea type="text" name="title"
                             value={formData.title} onChange={handleUpdate} />
                     </div>
                     <div className="form__group">
                         <label >Описание</label>
-                        <input type="text" name="description" className="form-style"
+                        <textarea type="text" name="description" className="big"
                             value={formData.description} onChange={handleUpdate} />
                     </div>
 

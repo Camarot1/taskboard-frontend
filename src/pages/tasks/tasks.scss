@@ -42,6 +42,11 @@ a {
     font-size: 2em;
 }
 
+.main__nick{
+    align-self: center;
+    margin-top: 10px;
+}
+
 .main__button {
     font-size: 1em;
     border: $border;
@@ -116,5 +121,7 @@ a {
             border-bottom: 1px solid black;
         }
     }
-
+    .red{
+        color:red;
+    }
 }

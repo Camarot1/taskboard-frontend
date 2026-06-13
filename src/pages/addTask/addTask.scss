@@ -44,6 +44,12 @@ a {
                 input {
                     box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.3);
                 }
+                textarea{
+                    min-width: 15vw;
+                }
+                .big{
+                    min-height: 10vh;
+                }
             }
         }
 

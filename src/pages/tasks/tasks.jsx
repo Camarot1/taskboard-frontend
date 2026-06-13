@@ -8,11 +8,12 @@ export default function TasksPage() {
     const [tasks, setTasks] = useState([])
     const [updatingTaskId, setUpdatingTaskId] = useState(null)
     const navigate = useNavigate();
-
+    const [userData, setUserData] = useState('')
 
     useEffect(() => {
         const loadData = async () => {
             const userDataFromToken = usersData()
+            setUserData(userDataFromToken)
             if (!userDataFromToken) {
                 navigate("/login")
             } else {
@@ -77,13 +78,21 @@ export default function TasksPage() {
                 throw new Error('Ошибка при архивации задачи')
             }
 
-            await fetchTask()
             alert('Задача успешно отправлена в архив!')
+            await fetchTask(userData.id)
         } catch (error) {
             console.error('Error archiving task:', error)
             alert('Ошибка при архивации задачи')
         } finally {
             setUpdatingTaskId(null)
+        }
+    }
+
+    const redirectEdit = async (item) =>{
+        try{
+            navigate(`/edit-task/${item}`)
+        }catch(error){
+            alert(error)
         }
     }
 
@@ -100,6 +109,7 @@ export default function TasksPage() {
         <main className='main-page'>
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
+                <div className="main__nick">Ваш никнейм: {userData.login}</div>
                 <button className="main__button" onClick={()=> {
                     deleteToken() 
                     navigate('/login')}}>
@@ -123,6 +133,7 @@ export default function TasksPage() {
                                         >
                                             {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
                                         </button>
+                                        <button className="button-block red" onClick ={ ()=> redirectEdit(item.id)}>Редактировать</button>
                                     </div>
                                 ))
                             )}</div>
@@ -177,7 +188,7 @@ export default function TasksPage() {
                                             >
                                                 Вернуть
                                             </button>
-                                            <button onClick={() => handleArchiveTask(item.id)}
+                                            <button className="red" onClick={() => handleArchiveTask(item.id)}
                                                 disabled={updatingTaskId === item.id}>Архив</button>
                                         </div>
                                     </div>
