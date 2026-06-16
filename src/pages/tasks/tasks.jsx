@@ -8,7 +8,7 @@ export default function TasksPage() {
     const [tasks, setTasks] = useState([])
     const [updatingTaskId, setUpdatingTaskId] = useState(null)
     const navigate = useNavigate();
-    const [userData, setUserData] = useState('')
+    const [userData, setUserData] = useState(null)
 
     useEffect(() => {
         const loadData = async () => {
@@ -36,13 +36,15 @@ export default function TasksPage() {
 
     const handleStatusChange = async (taskId, newStatus) => {
         setUpdatingTaskId(taskId)
+        const userId = userData.id
+        const username = userData?.name
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/patch/${taskId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ status: newStatus })
+                body: JSON.stringify({ status: newStatus, user_id: userId, username: username })
             })
 
             if (!response.ok) {
@@ -88,19 +90,68 @@ export default function TasksPage() {
         }
     }
 
-    const redirectEdit = async (item) =>{
-        try{
+    const redirectEdit = async (item) => {
+        try {
             navigate(`/edit-task/${item}`)
-        }catch(error){
+        } catch (error) {
             alert(error)
         }
     }
 
-    // группировка задач по статусам
     const todoTasks = tasks.filter(task => task.status === 'todo')
     const inProgressTasks = tasks.filter(task => task.status === 'in-progress')
     const doneTasks = tasks.filter(task => task.status === 'done')
 
+
+    const [companies, setCompanies] = useState([])
+    const [selectedCompany, setSelectedCompany] = useState('')
+
+    useEffect(() => {
+        if (userData) {
+            loadCompanies(userData.id)
+        }
+    }, [userData])
+
+    const loadCompanies = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_URL}/users/company/${userData.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            const data = await response.json()
+            setCompanies(data)
+        } catch (error) {
+            alert(error)
+        }
+    }
+
+    const selectChange = (e) => {
+        const value = e.target.value
+        setSelectedCompany(value)
+        if (value === 'my-tasks') {
+            fetchTask(userData.id)
+        } else if (value) {
+            takeTask(value)
+        }else{
+            setTasks([])
+        }
+
+    }
+
+    const takeTask = async (id) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_URL}/tasks/companytask/${id}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            const res = await response.json()
+            setTasks(res)
+        } catch (error) {
+            alert(error)
+        }
+    }
     if (loading) {
         return <div>Загрузка...</div>
     }
@@ -110,9 +161,16 @@ export default function TasksPage() {
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
                 <div className="main__nick">Ваш никнейм: {userData.login}</div>
-                <button className="main__button" onClick={()=> {
-                    deleteToken() 
-                    navigate('/login')}}>
+                <select onChange={selectChange} name="" id="company-select">
+                    <option value="my-tasks">Личные задачи</option>
+                    {companies.map(item => (
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                    ))}
+                </select>
+                <button className="main__button" onClick={() => {
+                    deleteToken()
+                    navigate('/login')
+                }}>
                     Выйти
                 </button>
                 <div className="main__tasks">
@@ -126,14 +184,14 @@ export default function TasksPage() {
                                     <div className="task" key={item.id}>
                                         <p className="title">{item.title}</p>
                                         <p className="desc">{item.description}</p>
-                                        <p className="id">ID пользователя: {item.user_id}</p>
+                                        <p className="name">Имя добавившего: {item.username}</p>
                                         <button className="button-block"
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
                                         >
                                             {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
                                         </button>
-                                        <button className="button-block red" onClick ={ ()=> redirectEdit(item.id)}>Редактировать</button>
+                                        <button className="button-block red" onClick={() => redirectEdit(item.id)}>Редактировать</button>
                                     </div>
                                 ))
                             )}</div>
@@ -149,7 +207,7 @@ export default function TasksPage() {
                                     <div className="task" key={item.id}>
                                         <p className="title">{item.title}</p>
                                         <p className="desc">{item.description}</p>
-                                        <p className="id">ID пользователя: {item.user_id}</p>
+                                        <p className="name">Имя взявшего: {item.username}</p>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
@@ -180,7 +238,7 @@ export default function TasksPage() {
                                     <div className="task" key={item.id}>
                                         <p className="title">{item.title}</p>
                                         <p className="desc">{item.description}</p>
-                                        <p className="id">ID пользователя: {item.user_id}</p>
+                                        <p className="name">Имя закончившего: {item.username}</p>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'in-progress')}

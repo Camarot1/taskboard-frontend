@@ -19,10 +19,12 @@ export const usersData = () =>{
     if (!token) return null
     const data = decode(token)
     if (!data) return null
-
+    const currentTime = Date.now() /1000
+    if (currentTime > data.exp){
+        return null
+    }
     return {
         id: data.id,
-        login: data.login,
-        company_id: data.company_id
+        login: data.login
     }
 }

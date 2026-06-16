@@ -11,6 +11,7 @@ export default function Header() {
             <div className="header__container">
                 <button className="header__button" onClick={() => navigate('/tasks')}>Задачи</button>
                 <button className="header__button" onClick={() => navigate('/addTask')}>Добавить</button>
+                <button className="header__button" onClick={() => navigate('/mycompanies')}>Задачи команд</button>
                 <button className="header__button" onClick={() => navigate('/login')}>Логин</button>
                 <button className="header__button" onClick={() => navigate('/register')}>Регистрация</button>
             </div>
