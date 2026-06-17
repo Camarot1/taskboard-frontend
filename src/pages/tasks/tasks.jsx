@@ -37,7 +37,7 @@ export default function TasksPage() {
     const handleStatusChange = async (taskId, newStatus) => {
         setUpdatingTaskId(taskId)
         const userId = userData.id
-        const username = userData?.name
+        const username = userData.login
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/patch/${taskId}`, {
                 method: 'PATCH',
@@ -63,32 +63,38 @@ export default function TasksPage() {
     }
 
     const handleArchiveTask = async (taskId) => {
-        if (!window.confirm(`Вы уверены, что хотите отправить задачу в архив?`)) {
-            return;
-        }
-
-        setUpdatingTaskId(taskId)
-        try {
-            const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-
-            if (!response.ok) {
-                throw new Error('Ошибка при архивации задачи')
-            }
-
-            alert('Задача успешно отправлена в архив!')
-            await fetchTask(userData.id)
-        } catch (error) {
-            console.error('Error archiving task:', error)
-            alert('Ошибка при архивации задачи')
-        } finally {
-            setUpdatingTaskId(null)
-        }
+    if (!window.confirm(`Вы уверены, что хотите отправить задачу в архив?`)) {
+        return;
     }
+
+    setUpdatingTaskId(taskId)
+    try {
+        const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: userData.login })
+        })
+
+        if (!response.ok) {
+            throw new Error('Ошибка при архивации задачи')
+        }
+
+        alert('Задача успешно отправлена в архив!')
+        
+        if (selectedCompany === 'my-tasks' || !selectedCompany) {
+            await fetchTask(userData.id)
+        } else {
+            await takeTask(selectedCompany)
+        }
+    } catch (error) {
+        console.error('Error archiving task:', error)
+        alert('Ошибка при архивации задачи')
+    } finally {
+        setUpdatingTaskId(null)
+    }
+}
 
     const redirectEdit = async (item) => {
         try {

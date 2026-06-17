@@ -53,7 +53,7 @@ export default function AddTask() {
                 <h1 className="main__title">Добавить задачу</h1>
                 <form className="main__form" onSubmit={handleAddTask}>
                     <div className="form__group">
-                        <label >Имя пользователя</label>
+                        <label >Имя Добавляющего</label>
                         <input type="text" name="username"
                             value={formData.username} onChange={handleUpdate} />
                     </div>
