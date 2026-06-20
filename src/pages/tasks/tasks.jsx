@@ -167,7 +167,7 @@ export default function TasksPage() {
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
                 <div className="main__nick">Ваш никнейм: {userData.login}</div>
-                <select onChange={selectChange} name="" id="company-select">
+                <select className="main__select" onChange={selectChange} name="" id="company-select">
                     <option value="my-tasks">Личные задачи</option>
                     {companies.map(item => (
                         <option key={item.id} value={item.id}>{item.name}</option>
