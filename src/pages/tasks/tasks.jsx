@@ -191,7 +191,6 @@ export default function TasksPage() {
                                     <div className="task" key={item.id}>
                                         <p className="title">{item.title}</p>
                                         <p className="desc">{item.description}</p>
-                                        <p className="desc">{item.company_id}</p>
                                         <p className="name">Имя добавившего: {item.username}</p>
                                         <button className="button-block"
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
