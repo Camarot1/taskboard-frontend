@@ -169,7 +169,7 @@ export default function TasksPage() {
                 <h1 className="main__title">Задачи</h1>
                 <div className="main__nick">Ваш никнейм: {userData.login}</div>
                 <select className="main__select" onChange={selectChange} name="" id="company-select">
-                    <option value="my-tasks">Личные задачи</option>
+                    <option value="my-tasks">Взято вами</option>
                     {companies.map(item => (
                         <option key={item.id} value={item.id}>{item.name}</option>
                     ))}
@@ -191,6 +191,7 @@ export default function TasksPage() {
                                     <div className="task" key={item.id}>
                                         <p className="title">{item.title}</p>
                                         <p className="desc">{item.description}</p>
+                                        <p className="desc">{item.company_id}</p>
                                         <p className="name">Имя добавившего: {item.username}</p>
                                         <button className="button-block"
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
