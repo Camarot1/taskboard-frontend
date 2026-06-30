@@ -204,6 +204,7 @@ export default function TasksPage() {
                             )}</div>
                     </div>
 
+
                     <div className="tasks__column">
                         <p className="column__title">In Progress</p>
                         <div className="tasks">
