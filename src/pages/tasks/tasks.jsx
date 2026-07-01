@@ -225,10 +225,10 @@ export default function TasksPage() {
                                                 Назад
                                             </button>
                                             <button
-                                                onClick={() => handleStatusChange(item.id, 'done')}
+                                                onClick={() => handleStatusChange(item.id, 'check')}
                                                 disabled={updatingTaskId === item.id}
                                             >
-                                                Завершить
+                                                Отправить на проверку
                                             </button>
                                         </div>
                                     </div>
@@ -239,7 +239,7 @@ export default function TasksPage() {
 
                     <div className="tasks__column">
                         <p className="column__title">Check</p>
-                        <div className="check">
+                        <div className="tasks">
                             {todoTasks.length === 0 ? (
                                 <div>Нет задач</div>
                             ) : (
@@ -249,7 +249,7 @@ export default function TasksPage() {
                                         <p className="desc">{item.description}</p>
                                         <p className="name">Имя добавившего: {item.username}</p>
                                         <button
-                                                onClick={() => handleStatusChange(item.id, 'todo')}
+                                                onClick={() => handleStatusChange(item.id, 'in-progress')}
                                                 disabled={updatingTaskId === item.id}
                                             >
                                                 На доработку
@@ -259,7 +259,7 @@ export default function TasksPage() {
                                                 onClick={() => handleStatusChange(item.id, 'done')}
                                                 disabled={updatingTaskId === item.id}
                                             >
-                                                Пропустить
+                                                Завершить
                                             </button>
                                     </div>
                                 ))
