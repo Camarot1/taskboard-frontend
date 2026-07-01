@@ -106,6 +106,7 @@ export default function TasksPage() {
 
     const todoTasks = tasks.filter(task => task.status === 'todo')
     const inProgressTasks = tasks.filter(task => task.status === 'in-progress')
+    const check = tasks.filter(task => task.status === 'check')
     const doneTasks = tasks.filter(task => task.status === 'done')
 
 
@@ -235,6 +236,36 @@ export default function TasksPage() {
                             )}
                         </div>
                     </div>
+
+                    <div className="tasks__column">
+                        <p className="column__title">Check</p>
+                        <div className="check">
+                            {todoTasks.length === 0 ? (
+                                <div>Нет задач</div>
+                            ) : (
+                                check.map(item => (
+                                    <div className="task" key={item.id}>
+                                        <p className="title">{item.title}</p>
+                                        <p className="desc">{item.description}</p>
+                                        <p className="name">Имя добавившего: {item.username}</p>
+                                        <button
+                                                onClick={() => handleStatusChange(item.id, 'todo')}
+                                                disabled={updatingTaskId === item.id}
+                                            >
+                                                На доработку
+                                            </button>
+                                            <button className="button-block red" onClick={() => redirectEdit(item.id)}>Редактировать текст задачи</button>
+                                            <button
+                                                onClick={() => handleStatusChange(item.id, 'done')}
+                                                disabled={updatingTaskId === item.id}
+                                            >
+                                                Пропустить
+                                            </button>
+                                    </div>
+                                ))
+                            )}</div>
+                    </div>
+
                     <div className="tasks__column">
                         <p className="column__title">Done</p>
                         <div className="tasks">
