@@ -63,38 +63,38 @@ export default function TasksPage() {
     }
 
     const handleArchiveTask = async (taskId) => {
-    if (!window.confirm(`Вы уверены, что хотите отправить задачу в архив?`)) {
-        return;
-    }
-
-    setUpdatingTaskId(taskId)
-    try {
-        const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: userData.login })
-        })
-
-        if (!response.ok) {
-            throw new Error('Ошибка при архивации задачи')
+        if (!window.confirm(`Вы уверены, что хотите отправить задачу в архив?`)) {
+            return;
         }
 
-        alert('Задача успешно отправлена в архив!')
-        
-        if (selectedCompany === 'my-tasks' || !selectedCompany) {
-            await fetchTask(userData.id)
-        } else {
-            await takeTask(selectedCompany)
+        setUpdatingTaskId(taskId)
+        try {
+            const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: userData.login })
+            })
+
+            if (!response.ok) {
+                throw new Error('Ошибка при архивации задачи')
+            }
+
+            alert('Задача успешно отправлена в архив!')
+
+            if (selectedCompany === 'my-tasks' || !selectedCompany) {
+                await fetchTask(userData.id)
+            } else {
+                await takeTask(selectedCompany)
+            }
+        } catch (error) {
+            console.error('Error archiving task:', error)
+            alert('Ошибка при архивации задачи')
+        } finally {
+            setUpdatingTaskId(null)
         }
-    } catch (error) {
-        console.error('Error archiving task:', error)
-        alert('Ошибка при архивации задачи')
-    } finally {
-        setUpdatingTaskId(null)
     }
-}
 
     const redirectEdit = async (item) => {
         try {
@@ -141,7 +141,7 @@ export default function TasksPage() {
             fetchTask(userData.id)
         } else if (value) {
             takeTask(value)
-        }else{
+        } else {
             setTasks([])
         }
 
@@ -163,7 +163,7 @@ export default function TasksPage() {
         return <div>Загрузка...</div>
     }
 
-    
+
     return (
         <main className='main-page'>
             <div className="main__container">
@@ -249,18 +249,18 @@ export default function TasksPage() {
                                         <p className="desc">{item.description}</p>
                                         <p className="name">Имя добавившего: {item.username}</p>
                                         <button
-                                                onClick={() => handleStatusChange(item.id, 'in-progress')}
-                                                disabled={updatingTaskId === item.id}
-                                            >
-                                                На доработку
-                                            </button>
-                                            <button className="button-block red" onClick={() => redirectEdit(item.id)}>Редактировать текст задачи</button>
-                                            <button
-                                                onClick={() => handleStatusChange(item.id, 'done')}
-                                                disabled={updatingTaskId === item.id}
-                                            >
-                                                Завершить
-                                            </button>
+                                            onClick={() => handleStatusChange(item.id, 'in-progress')}
+                                            disabled={updatingTaskId === item.id}
+                                        >
+                                            На доработку
+                                        </button>
+                                        <button className="button-block red" onClick={() => redirectEdit(item.id)}>Редактировать текст задачи</button>
+                                        <button
+                                            onClick={() => handleStatusChange(item.id, 'done')}
+                                            disabled={updatingTaskId === item.id}
+                                        >
+                                            Завершить
+                                        </button>
                                     </div>
                                 ))
                             )}</div>
