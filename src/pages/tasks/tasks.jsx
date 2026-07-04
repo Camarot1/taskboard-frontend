@@ -163,6 +163,15 @@ export default function TasksPage() {
         return <div>Загрузка...</div>
     }
 
+    function TaskCard({ title, description, username }) {
+        return (
+            <div className="props">
+                <p className="title">{title}</p>
+                <p className="desc">{description}</p>   
+                <p className="name">Имя добавившего: {username}</p>
+            </div>
+        )
+    }
 
     return (
         <main className='main-page'>
@@ -190,9 +199,7 @@ export default function TasksPage() {
                             ) : (
                                 todoTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <p className="title">{item.title}</p>
-                                        <p className="desc">{item.description}</p>
-                                        <p className="name">Имя добавившего: {item.username}</p>
+                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
                                         <button className="button-block"
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
@@ -214,9 +221,7 @@ export default function TasksPage() {
                             ) : (
                                 inProgressTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <p className="title">{item.title}</p>
-                                        <p className="desc">{item.description}</p>
-                                        <p className="name">Имя взявшего: {item.username}</p>
+                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
@@ -245,9 +250,7 @@ export default function TasksPage() {
                             ) : (
                                 check.map(item => (
                                     <div className="task" key={item.id}>
-                                        <p className="title">{item.title}</p>
-                                        <p className="desc">{item.description}</p>
-                                        <p className="name">Имя добавившего: {item.username}</p>
+                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
                                         <button
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
@@ -275,9 +278,7 @@ export default function TasksPage() {
 
                                 doneTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <p className="title">{item.title}</p>
-                                        <p className="desc">{item.description}</p>
-                                        <p className="name">Имя закончившего: {item.username}</p>
+                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'in-progress')}

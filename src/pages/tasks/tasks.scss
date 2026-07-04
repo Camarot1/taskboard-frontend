@@ -4,7 +4,7 @@
 }
 
 $border: 1px solid black;
-
+$standart: 1em;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
@@ -100,13 +100,22 @@ a {
                 }
             }
 
+            .props{
+                @include column;
+                gap:5px;
+            }
+
             .title {
                 font-size: calc(1em + 5px);
                 margin-bottom: 5px;
             }
 
             .desk {
-                font-size: 1em;
+                font-size: $standart;
+            }
+
+            .name{
+                font-size: $standart;
             }
         }
 
