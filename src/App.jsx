@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import TasksPage from './pages/tasks/tasks.jsx'
+import TasksPage from './pages/tasks/tasks.tsx'
 import LoginPage from './pages/login/login.jsx'
 import AddPage from './pages/addTask/addTask.jsx'
 import MainPage from './pages/main.jsx'

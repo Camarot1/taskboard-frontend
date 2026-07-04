@@ -2,13 +2,42 @@ import React, { useState, useEffect } from "react"
 import './tasks.scss'
 import { useNavigate } from 'react-router-dom'
 import { usersData, deleteToken } from '../token'
+
+interface Task {
+    id: number;
+    user_id: number;
+    username: string;
+    company_id: number;
+    title: string;
+    description: string;
+    status: string;
+    display_order: number;
+    created_at: string;
+    updated_at: string;
+}
+interface UserData {
+    id: number;
+    login: string;
+}
+
+interface UserCompanies {
+    id: number;
+    name: string;
+}
+
+interface TaskProps {
+  title: string;
+  description: string;
+  username: string;
+}
+
 export default function TasksPage() {
 
-    const [loading, setLoading] = useState(true)
-    const [tasks, setTasks] = useState([])
-    const [updatingTaskId, setUpdatingTaskId] = useState(null)
+    const [loading, setLoading] = useState<boolean>(true)
+    const [tasks, setTasks] = useState<Task[]>([])
+    const [updatingTaskId, setUpdatingTaskId] = useState<number | null>(null)
     const navigate = useNavigate();
-    const [userData, setUserData] = useState(null)
+    const [userData, setUserData] = useState<UserData | null>(null)
 
     useEffect(() => {
         const loadData = async () => {
@@ -24,27 +53,28 @@ export default function TasksPage() {
         loadData()
     }, [navigate])
 
-    const fetchTask = async (userId) => {
+    const fetchTask = async (userId: number): Promise<void> => {
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/${userId}`)
-            const data = await response.json()
+            const data: Task[] = await response.json()
             setTasks(data)
         } catch (error) {
             console.error(error)
         }
     }
 
-    const handleStatusChange = async (taskId, newStatus) => {
+    const handleStatusChange = async (taskId: number, newStatus: string): Promise<void> => {
         setUpdatingTaskId(taskId)
-        const userId = userData.id
-        const username = userData.login
+        if (!userData) {
+            throw new Error('Not userData')
+        }
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/patch/${taskId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ status: newStatus, user_id: userId, username: username })
+                body: JSON.stringify({ status: newStatus, user_id: userData.id, username: userData.login })
             })
 
             if (!response.ok) {
@@ -62,13 +92,16 @@ export default function TasksPage() {
         }
     }
 
-    const handleArchiveTask = async (taskId) => {
+    const handleArchiveTask = async (taskId: number): Promise<void> => {
         if (!window.confirm(`Вы уверены, что хотите отправить задачу в архив?`)) {
             return;
         }
 
         setUpdatingTaskId(taskId)
         try {
+            if (!userData) {
+                throw new Error('Not userData')
+            }
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/done/${taskId}`, {
                 method: 'POST',
                 headers: {
@@ -96,7 +129,7 @@ export default function TasksPage() {
         }
     }
 
-    const redirectEdit = async (item) => {
+    const redirectEdit = async (item: number): Promise<void> => {
         try {
             navigate(`/edit-task/${item}`)
         } catch (error) {
@@ -110,16 +143,19 @@ export default function TasksPage() {
     const doneTasks = tasks.filter(task => task.status === 'done')
 
 
-    const [companies, setCompanies] = useState([])
-    const [selectedCompany, setSelectedCompany] = useState('')
+    const [companies, setCompanies] = useState<UserCompanies[]>([])
+    const [selectedCompany, setSelectedCompany] = useState<string>('')
 
     useEffect(() => {
         if (userData) {
-            loadCompanies(userData.id)
+            loadCompanies()
         }
     }, [userData])
 
-    const loadCompanies = async () => {
+    const loadCompanies = async ():Promise<void> => {
+        if(!userData){
+            throw new Error ('no UserData')
+        }
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/users/company/${userData.id}`, {
                 method: 'GET',
@@ -134,11 +170,13 @@ export default function TasksPage() {
         }
     }
 
-    const selectChange = (e) => {
+    const selectChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
         const value = e.target.value
         setSelectedCompany(value)
         if (value === 'my-tasks') {
-            fetchTask(userData.id)
+            if (userData) {
+                fetchTask(userData.id)
+            }
         } else if (value) {
             takeTask(value)
         } else {
@@ -147,7 +185,7 @@ export default function TasksPage() {
 
     }
 
-    const takeTask = async (id) => {
+    const takeTask = async (id:String):Promise<void> => {
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/companytask/${id}`, {
                 method: 'GET',
@@ -163,11 +201,11 @@ export default function TasksPage() {
         return <div>Загрузка...</div>
     }
 
-    function TaskCard({ title, description, username }) {
+    function TaskCard({ title, description, username }: TaskProps) {
         return (
             <div className="props">
                 <p className="title">{title}</p>
-                <p className="desc">{description}</p>   
+                <p className="desc">{description}</p>
                 <p className="name">Имя добавившего: {username}</p>
             </div>
         )
@@ -177,7 +215,7 @@ export default function TasksPage() {
         <main className='main-page'>
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
-                <div className="main__nick">Ваш никнейм: {userData.login}</div>
+                <div className="main__nick">Ваш никнейм: {userData?.login}</div>
                 <select className="main__select" onChange={selectChange} name="" id="company-select">
                     <option value="my-tasks">Взято вами</option>
                     {companies.map(item => (
@@ -199,7 +237,7 @@ export default function TasksPage() {
                             ) : (
                                 todoTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} />
                                         <button className="button-block"
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
@@ -221,7 +259,7 @@ export default function TasksPage() {
                             ) : (
                                 inProgressTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} />
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
@@ -250,7 +288,7 @@ export default function TasksPage() {
                             ) : (
                                 check.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} />
                                         <button
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
@@ -278,7 +316,7 @@ export default function TasksPage() {
 
                                 doneTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} />
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'in-progress')}
