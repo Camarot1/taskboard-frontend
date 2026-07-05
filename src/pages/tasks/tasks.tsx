@@ -283,7 +283,7 @@ export default function TasksPage() {
                     <div className="tasks__column">
                         <p className="column__title">Check</p>
                         <div className="tasks">
-                            {todoTasks.length === 0 ? (
+                            {check.length === 0 ? (
                                 <div>Нет задач</div>
                             ) : (
                                 check.map(item => (
