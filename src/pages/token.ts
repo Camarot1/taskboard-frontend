@@ -28,19 +28,21 @@ export const decode = (token: string): DecodedToken | null =>{
 interface userData{
     id: number;
     login: string;
+    companies_id: number[]
 }
 
 export const usersData = ():userData | null =>{
     const token = getToken()
     if (!token) return null
     const data = decode(token)
-    if (!data) return null
+   if (!data) return null
     const currentTime = Date.now() /1000
     if (currentTime > data.exp){
         return null
     }
     return {
         id: data.id,
-        login: data.login
+        login: data.login,
+        companies_id: data.companies_id
     }
 }
