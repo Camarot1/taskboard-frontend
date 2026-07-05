@@ -5,9 +5,8 @@ import LoginPage from './pages/login/login.tsx'
 import AddPage from './pages/addTask/addTask.tsx'
 import MainPage from './pages/main.jsx'
 import EditTask from './pages/edit-task/edit-task.tsx'
-import MyCompanies from './pages/mycompanies/myCompanies.jsx'
 import RegisterPage from './pages/register/register.tsx'
-import Header from './pages/components/header.jsx'
+import Header from './pages/components/header.tsx'
 export default function App() {
     return (
         <BrowserRouter>
@@ -20,7 +19,6 @@ export default function App() {
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/register" element={<RegisterPage />} />
                         <Route path="/edit-task/:id" element={<EditTask/>} />
-                        <Route path="/mycompanies" element={<MyCompanies/>} />
                     </Routes>
             </div>
         </BrowserRouter>
