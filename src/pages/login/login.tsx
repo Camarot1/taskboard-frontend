@@ -3,16 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import './login.scss'
 import { setToken } from "../token"
 
+interface Data {
+    login: string;
+    password: string;
+}
+
+interface User {
+id: number;
+login: string;
+company_id: string;
+}
+interface Response {
+user: User;
+token: string;
+}
+
 export default function Login() {
     const navigate = useNavigate()
-    const [Data, setData] = useState({
+    const [Data, setData] = useState<Data>({
         login: '',
         password: ''
     })
 
     // const [userData, setUserData] = useState(null)
 
-    const updateLogin = async (e) => {
+    const updateLogin = async (e: React.ChangeEvent<HTMLInputElement> ):Promise<void> => {
         const { name, value } = e.target
 
         setData({
@@ -21,7 +36,7 @@ export default function Login() {
         })
     }
 
-    const Login = async (e) => {
+    const Login = async (e:React.FormEvent<HTMLFormElement>):Promise<void> => {
         e.preventDefault()
         try {
 
@@ -32,7 +47,7 @@ export default function Login() {
                 },
                 body: JSON.stringify(Data)
             })
-            const data = await response.json()
+            const data:Response = await response.json()
             setToken(data.token)
             navigate('/tasks')
             // const userDataToken = usersData()

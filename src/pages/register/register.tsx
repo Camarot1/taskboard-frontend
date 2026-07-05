@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import './register.scss'
 import { useNavigate } from "react-router-dom";
+
+interface Data {
+    email: string;
+    username: string;
+    password: string;
+}
+
 export default function RegisterPage() {
-    const [data, setData] = useState({
+    const [data, setData] = useState<Data>({
         email: '',
         username: '',
         password:''
     })
     const navigate = useNavigate()
-    const fetchData = async (e) => {
+    const fetchData = async (e: React.FormEvent<HTMLFormElement>):Promise<void> => {
         e.preventDefault()
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/users/register`, {
@@ -21,7 +28,7 @@ export default function RegisterPage() {
             alert(error)
         }
     }
-    const updateRegister = async(e)=>{
+    const updateRegister = async(e: React.ChangeEvent<HTMLInputElement>): Promise<void>=>{
         const {name, value} = e.target
         setData({
             ...data,

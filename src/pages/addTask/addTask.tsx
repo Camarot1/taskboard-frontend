@@ -3,21 +3,42 @@ import { useNavigate } from 'react-router-dom'
 import './addTask.scss'
 import { usersData } from '../token'
 
+interface FormData {
+    name: string;
+    title: string;
+    description: string;
+    status: string;
+    display_order: number
+}
+
+interface UserData {
+    id: number;
+    login: string;
+}
+
+interface Companies{
+    id: number;
+    name: string;
+}
+
 export default function AddTask() {
     const navigate = useNavigate()
-    const [Task, setTask] = useState([])
-    const [userData, setUserData] = useState('')
+    const [userData, setUserData] = useState<UserData>({
+        id: 0,
+        login: ''
+    })
 
     useEffect(() => {
         const userDataFromToken = usersData()
         if (!userDataFromToken) {
             navigate("/login")
+            return
         }
         setUserData(userDataFromToken)
     }, [navigate])
 
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         name: '',
         title: '',
         description: '',
@@ -25,7 +46,7 @@ export default function AddTask() {
         display_order: 1
     })
 
-    const handleUpdate = async (e) => {
+    const handleUpdate = async (e: React.ChangeEvent<HTMLTextAreaElement>): Promise<void> => {
         const { name, value } = e.target
         setFormData({
             ...formData,
@@ -34,7 +55,7 @@ export default function AddTask() {
 
     }
 
-    const handleAddTask = async (e) => {
+    const handleAddTask = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
         try {
             const dataToSend = {
@@ -54,12 +75,11 @@ export default function AddTask() {
         }
     }
 
-    const [companies, setCompanies] = useState([])
-    const [selectedCompany, setSelectedCompany] = useState('')
+    const [companies, setCompanies] = useState<Companies[]>([])
 
     useEffect(() => {
         if (userData) {
-            loadCompanies(userData.id)
+            loadCompanies()
         }
     }, [userData])
 
@@ -71,13 +91,13 @@ export default function AddTask() {
                     'Content-Type': 'application/json'
                 }
             })
-            const data = await response.json()
+            const data: Companies[] = await response.json()
             setCompanies(data)
 
             if (data.length > 0) {
                 setFormData((prev) => ({
                     ...prev,
-                    name: data[0].name,
+                    name: data[0]?.name ?? '',
                 }))
             }
         } catch (error) {
@@ -85,9 +105,8 @@ export default function AddTask() {
         }
     }
 
-    const selectChange = (e) => {
+    const selectChange = (e: React.ChangeEvent<HTMLSelectElement>):void => {
         const value = e.target.value
-        setSelectedCompany(value)
         setFormData((prev) => ({
             ...prev,
             name: value
@@ -114,12 +133,12 @@ export default function AddTask() {
                     </div>
                     <div className="form__group">
                         <label >Заголовок</label>
-                        <textarea type="text" name="title"
+                        <textarea name="title"
                             value={formData.title} onChange={handleUpdate} />
                     </div>
                     <div className="form__group">
                         <label >Описание</label>
-                        <textarea type="text" name="description" className="big"
+                        <textarea name="description" className="big"
                             value={formData.description} onChange={handleUpdate} />
                     </div>
 

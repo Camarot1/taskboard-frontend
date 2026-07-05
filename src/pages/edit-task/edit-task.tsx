@@ -2,9 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import './edit-task.scss'
 
+interface UpdateData {
+    title: string;
+    description: string;
+}
+
+interface Task {
+    id: number;
+    user_id: number;
+    username: string;
+    company_id: number;
+    title: string;
+    description: string;
+    status: string;
+    display_order: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export default function EditTask() {
     const { id } = useParams()
-    const [updateData, setUpdateData] = useState({
+    const [updateData, setUpdateData] = useState<UpdateData>({
         title: '',
         description: ''
     })
@@ -17,26 +35,30 @@ export default function EditTask() {
     const loadData = async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/gettask/${id}`)
-            const res = await response.json()
-            const task = res.message[0]
-            setUpdateData({
-                title: task.title,
-                description: task.description
-            })
+            const tasks: Task[] = await response.json()
+            if (tasks && tasks.length > 0) {
+                const task = tasks[0]
+                if (task) {
+                    setUpdateData({
+                        title: task.title,
+                        description: task.description
+                    })
+                }
+            }
         } catch (error) {
             alert(error)
         }
     }
 
-    const change = (e) => {
+    const change = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
         const { name, value } = e.target
         setUpdateData(prev => ({
-            ...updateData,
+            ...prev,
             [name]: value
         }))
     }
 
-    const fetchData = async (e) => {
+    const fetchData = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/patchtask/${id}`, {
@@ -56,11 +78,11 @@ export default function EditTask() {
                 <form className="main__form" onSubmit={fetchData}>
                     <div className="form__block">
                         <label>Заголовок</label>
-                        <textarea className="textarea-small" type="text" value={updateData.title} name="title" onChange={change}/>
+                        <textarea className="textarea-small" value={updateData.title} name="title" onChange={change} />
                     </div>
                     <div className="form__block">
                         <label>Текст</label>
-                        <textarea type="text" value={updateData.description} name="description" onChange={change}/>
+                        <textarea value={updateData.description} name="description" onChange={change} />
                     </div>
                     <button>Обновить</button>
                 </form>
