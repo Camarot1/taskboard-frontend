@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import './tasks.scss'
 import { useNavigate } from 'react-router-dom'
-import { usersData, deleteToken } from '../token'
+import { usersData, deleteToken, getToken } from '../token'
 
 interface Task {
     id: number;
@@ -11,6 +11,7 @@ interface Task {
     title: string;
     description: string;
     status: string;
+    checker_username: string;
     display_order: number;
     created_at: string;
     updated_at: string;
@@ -26,9 +27,9 @@ interface UserCompanies {
 }
 
 interface TaskProps {
-  title: string;
-  description: string;
-  username: string;
+    title: string;
+    description: string;
+    username: string;
 }
 
 export default function TasksPage() {
@@ -36,8 +37,11 @@ export default function TasksPage() {
     const [loading, setLoading] = useState<boolean>(true)
     const [tasks, setTasks] = useState<Task[]>([])
     const [updatingTaskId, setUpdatingTaskId] = useState<number | null>(null)
+    const [checkTaskId, setCheckTaskId] = useState<number | null>(null)
     const navigate = useNavigate();
     const [userData, setUserData] = useState<UserData | null>(null)
+    const [companies, setCompanies] = useState<UserCompanies[]>([])
+    const [selectedCompany, setSelectedCompany] = useState<string>('')
 
     useEffect(() => {
         const loadData = async () => {
@@ -69,6 +73,21 @@ export default function TasksPage() {
             throw new Error('Not userData')
         }
         try {
+            if (newStatus === 'in-progress') {
+                const token = getToken()
+
+                await fetch(
+                    `${process.env.REACT_APP_URL}/tasks/uncheck/${taskId}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
+                )
+            }
+
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/patch/${taskId}`, {
                 method: 'PATCH',
                 headers: {
@@ -143,18 +162,15 @@ export default function TasksPage() {
     const doneTasks = tasks.filter(task => task.status === 'done')
 
 
-    const [companies, setCompanies] = useState<UserCompanies[]>([])
-    const [selectedCompany, setSelectedCompany] = useState<string>('')
-
     useEffect(() => {
         if (userData) {
             loadCompanies()
         }
     }, [userData])
 
-    const loadCompanies = async ():Promise<void> => {
-        if(!userData){
-            throw new Error ('no UserData')
+    const loadCompanies = async (): Promise<void> => {
+        if (!userData) {
+            throw new Error('no UserData')
         }
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/users/company/${userData.id}`, {
@@ -185,7 +201,7 @@ export default function TasksPage() {
 
     }
 
-    const takeTask = async (id:String):Promise<void> => {
+    const takeTask = async (id: string): Promise<void> => {
         try {
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/companytask/${id}`, {
                 method: 'GET',
@@ -197,6 +213,48 @@ export default function TasksPage() {
             alert(error)
         }
     }
+
+    const takeCheck = async (taskId: number): Promise<void> => {
+        if (!window.confirm("Вы уверенны что хотите взять задачу на проверку?")) {
+            return
+        }
+        setCheckTaskId(taskId)
+        try {
+            if (!userData) {
+                throw new Error("Not userdata")
+            }
+
+            const token = getToken()
+
+            const response = await fetch(`${process.env.REACT_APP_URL}/tasks/check/${taskId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.message || 'Ошибка при архивации задачи')
+            }
+
+            setTasks(prevTasks =>
+                prevTasks.map(task =>
+                    task.id === taskId
+                        ? { ...task, checker_username: userData.login }
+                        : task
+                )
+            )
+
+        } catch (error) {
+            console.log(error)
+            alert("Ошибка при взятии задачи на проверку")
+        }
+    }
+
+
+
     if (loading) {
         return <div>Загрузка...</div>
     }
@@ -289,13 +347,20 @@ export default function TasksPage() {
                                 check.map(item => (
                                     <div className="task" key={item.id}>
                                         <TaskCard title={item.title} description={item.description} username={item.username} />
+                                        <p>Текущий проверяющий: {item.checker_username}</p>
+                                        <button
+                                            className="button-block"
+                                            onClick={() => takeCheck(item.id)}>
+                                            Стать проверяющим</button>
                                         <button
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
                                         >
                                             На доработку
                                         </button>
-                                        <button className="button-block red" onClick={() => redirectEdit(item.id)}>Редактировать текст задачи</button>
+                                        <button className="button-block red" onClick={() => redirectEdit(item.id)}>
+                                            Редактировать текст задачи
+                                        </button>
                                         <button
                                             onClick={() => handleStatusChange(item.id, 'done')}
                                             disabled={updatingTaskId === item.id}
@@ -304,7 +369,8 @@ export default function TasksPage() {
                                         </button>
                                     </div>
                                 ))
-                            )}</div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="tasks__column">
@@ -317,6 +383,7 @@ export default function TasksPage() {
                                 doneTasks.map(item => (
                                     <div className="task" key={item.id}>
                                         <TaskCard title={item.title} description={item.description} username={item.username} />
+                                        <p>Проверявший: {item.checker_username}</p>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'in-progress')}
