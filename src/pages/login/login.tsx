@@ -25,8 +25,6 @@ export default function Login() {
         password: ''
     })
 
-    // const [userData, setUserData] = useState(null)
-
     const updateLogin = async (e: React.ChangeEvent<HTMLInputElement> ):Promise<void> => {
         const { name, value } = e.target
 
@@ -64,7 +62,7 @@ export default function Login() {
     }
 
     return (
-        <main className="login-page">
+        <main className="login-page login-page-white">
             <div className="main__container container">
                 <form className="main__form" onSubmit={
                     Login

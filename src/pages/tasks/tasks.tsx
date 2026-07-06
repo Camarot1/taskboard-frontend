@@ -50,7 +50,6 @@ export default function TasksPage() {
     const [loading, setLoading] = useState<boolean>(true)
     const [tasks, setTasks] = useState<Task[]>([])
     const [updatingTaskId, setUpdatingTaskId] = useState<number | null>(null)
-    const [checkTaskId, setCheckTaskId] = useState<number | null>(null)
     const navigate = useNavigate();
     const [userData, setUserData] = useState<UserData | null>(null)
     const [companies, setCompanies] = useState<UserCompanies[]>([])
@@ -231,7 +230,7 @@ export default function TasksPage() {
         if (!window.confirm("Вы уверенны что хотите взять задачу на проверку?")) {
             return
         }
-        setCheckTaskId(taskId)
+
         try {
             if (!userData) {
                 throw new Error("Not userdata")

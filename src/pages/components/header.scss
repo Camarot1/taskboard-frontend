@@ -1,37 +1,95 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 * {
-    color: black;
-    font-family: Montserrat;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header-white {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  
+  .header__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    
+    .header__button {
+      padding: 8px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: #f3f4f6;
+        color: #1f2937;
+      }
+      
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+}
+
+.header-black {
+  background-color: #1f2937;
+  border-bottom: 1px solid #374151;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  
+  .header__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    
+    .header__button {
+      padding: 8px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #d1d5db;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: #374151;
+        color: #f9fafb;
+      }
+      
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
 }
 
 li {
-    list-style-type: none;
-}
-
-button {
-    outline: none;
-    background: none;
-    border: none;
+  list-style-type: none;
 }
 
 a {
-    text-decoration: none;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-}
-
-.header__container{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    grid-template-rows: 5vh;
-    background-color: #dd9f9f;
-    .header__button{
-        cursor: pointer;
-        border-left: 1px solid black;
-        font-size: 20px;
-    }
+  text-decoration: none;
 }

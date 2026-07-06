@@ -36,7 +36,7 @@ export default function RegisterPage() {
         })
     }
     return (
-        <div className="register-page">
+        <div className="register-page register-page-white">
             <div className="main__container">
                 <h1 className="main__title">Регистрация</h1>
                 <form className='main__form' onSubmit={fetchData}>
