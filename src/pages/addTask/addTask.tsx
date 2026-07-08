@@ -8,6 +8,7 @@ interface FormData {
     title: string;
     description: string;
     status: string;
+    timeline: string;
     display_order: number
 }
 
@@ -172,7 +173,7 @@ export default function AddTask() {
                             onChange={handleUpdate} 
                         />
                     </div>
-
+                            
                     <button type="submit" className="form__button">
                         Добавить задачу
                     </button>
