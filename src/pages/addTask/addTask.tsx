@@ -8,7 +8,6 @@ interface FormData {
     title: string;
     description: string;
     status: string;
-    timeline: string;
     display_order: number
 }
 
@@ -23,9 +22,11 @@ interface Companies {
     name: string;
 }
 
+
+
 export default function AddTask() {
     const navigate = useNavigate()
-    
+
     const [userData, setUserData] = useState<UserData>({
         id: 0,
         login: '',
@@ -33,7 +34,7 @@ export default function AddTask() {
     })
     const [companies, setCompanies] = useState<Companies[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    
+
     const [formData, setFormData] = useState<FormData>({
         name: '',
         title: '',
@@ -41,18 +42,19 @@ export default function AddTask() {
         status: 'todo',
         display_order: 1
     })
+    const [deadLine, setDeadLine] = useState<string>('')
 
     useEffect(() => {
         const initializeData = async () => {
             const userDataFromToken = usersData()
-            
+
             if (!userDataFromToken) {
                 navigate("/login")
                 return
             }
-            
+
             setUserData(userDataFromToken)
-            
+
             try {
                 const response = await fetch(`${process.env.REACT_APP_URL}/users/company/${userDataFromToken.id}`, {
                     method: 'GET',
@@ -60,13 +62,13 @@ export default function AddTask() {
                         'Content-Type': 'application/json'
                     }
                 })
-                
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
-                
+
                 const data: Companies[] = await response.json()
-                
+
                 setCompanies(data)
                 if (data.length > 0) {
                     setFormData((prev) => ({
@@ -81,12 +83,16 @@ export default function AddTask() {
                 setIsLoading(false)
             }
         }
-        
+
         initializeData()
     }, [navigate])
 
-    const handleUpdate = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    const handleUpdate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const { name, value } = e.target
+        if(name == 'deadline'){
+            setDeadLine(value)
+            return
+        }
         setFormData({
             ...formData,
             [name]: value
@@ -95,13 +101,15 @@ export default function AddTask() {
 
     const handleAddTask = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault()
-        
+
         try {
+            const utcDeadLine = new Date(deadLine).toISOString()
             const dataToSend = {
                 username: userData.login,
+                deadline: utcDeadLine,
                 ...formData
             }
-            
+
             const response = await fetch(`${process.env.REACT_APP_URL}/tasks/add`, {
                 method: 'POST',
                 headers: {
@@ -109,11 +117,11 @@ export default function AddTask() {
                 },
                 body: JSON.stringify(dataToSend)
             })
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`)
             }
-            
+
             alert('Задача добавлена')
         } catch (error) {
             console.error('Ошибка при добавлении задачи:', error)
@@ -143,7 +151,7 @@ export default function AddTask() {
                     </div>
                     <div className="form__group">
                         <label>Название компании</label>
-                        <select 
+                        <select
                             className="main__select" onChange={selectChange} name="company" id="company-select" value={formData.name}>
                             {companies.length === 0 ? (
                                 <option value="">Нет доступных компаний</option>
@@ -158,22 +166,32 @@ export default function AddTask() {
                     </div>
                     <div className="form__group">
                         <label>Заголовок</label>
-                        <textarea 
+                        <textarea
                             name="title"
-                            value={formData.title} 
-                            onChange={handleUpdate} 
+                            value={formData.title}
+                            onChange={handleUpdate}
+                            required
                         />
                     </div>
                     <div className="form__group">
                         <label>Описание</label>
-                        <textarea 
-                            name="description" 
+                        <textarea
+                            name="description"
                             className="big"
-                            value={formData.description} 
-                            onChange={handleUpdate} 
+                            value={formData.description}
+                            onChange={handleUpdate}
                         />
                     </div>
-                            
+                    <div className="form__group">
+                        <label>Дедлайн</label>
+                        <input
+                            type='datetime-local'
+                            name="deadline"
+                            value={deadLine}
+                            onChange={handleUpdate}
+                        />
+                    </div>
+
                     <button type="submit" className="form__button">
                         Добавить задачу
                     </button>

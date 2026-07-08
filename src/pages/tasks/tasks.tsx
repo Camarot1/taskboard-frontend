@@ -13,6 +13,7 @@ interface Task {
     status: string;
     checker_username: string;
     display_order: number;
+    deadline: string;
     created_at: string;
     updated_at: string;
 }
@@ -31,6 +32,7 @@ interface TaskProps {
     description: string;
     username: string
     created_at: string;
+    deadline: string;
     checker_username?: string | null
 }
 
@@ -41,7 +43,7 @@ const formatDate = (dateString: string): string => {
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
     })
 }
 
@@ -271,13 +273,14 @@ export default function TasksPage() {
         return <div>Загрузка...</div>
     }
 
-    function TaskCard({ title, description, username, created_at, checker_username }: TaskProps) {
+    function TaskCard({ title, description, username, created_at, deadline, checker_username }: TaskProps) {
         return (
             <div className="props">
                 <p className="title">{title}</p>
                 <p className="desc">{description}</p>
                 <p className="name">Имя добавившего: {username }</p>
                 <p className="created_at">Создано: {formatDate(created_at)}</p>
+                <p className="created_at">Задача до: {formatDate(deadline)}</p>
                 {checker_username && <p>Проверяющий : {checker_username || 'Проверяющего нет'}</p>}
             </div>
         )
@@ -309,7 +312,7 @@ export default function TasksPage() {
                             ) : (
                                 todoTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} />
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} deadline={item.deadline} />
                                         <button className="button-block"
                                             onClick={() => handleStatusChange(item.id, 'in-progress')}
                                             disabled={updatingTaskId === item.id}
@@ -331,7 +334,7 @@ export default function TasksPage() {
                             ) : (
                                 inProgressTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} deadline={item.deadline}/>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
@@ -360,7 +363,7 @@ export default function TasksPage() {
                             ) : (
                                 check.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username} deadline={item.deadline}/>
                                         <button
                                             className="button-block"
                                             onClick={() => takeCheck(item.id)}>
@@ -395,7 +398,7 @@ export default function TasksPage() {
 
                                 doneTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username} deadline={item.deadline}/>
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'in-progress')}
