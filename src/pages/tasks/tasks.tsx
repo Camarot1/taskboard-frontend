@@ -278,7 +278,7 @@ export default function TasksPage() {
             <div className="props">
                 <p className="title">{title}</p>
                 <p className="desc">{description}</p>
-                <p className="name">Имя добавившего: {username }</p>
+                <p className="name">Имя добавившего: {username}</p>
                 <p className="created_at">Создано: {formatDate(created_at)}</p>
                 <p className="created_at">Задача до: {formatDate(deadline)}</p>
                 {checker_username && <p>Проверяющий : {checker_username || 'Проверяющего нет'}</p>}
@@ -298,6 +298,9 @@ export default function TasksPage() {
                     ))}
                 </select>
                 <button className="main__button" onClick={() => {
+                    if (!window.confirm(`Вы уверены, что хотите выйти?`)) {
+                        return;
+                    }
                     deleteToken()
                     navigate('/login')
                 }}>
@@ -334,7 +337,7 @@ export default function TasksPage() {
                             ) : (
                                 inProgressTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} deadline={item.deadline}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} deadline={item.deadline} />
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'todo')}
@@ -363,7 +366,7 @@ export default function TasksPage() {
                             ) : (
                                 check.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username} deadline={item.deadline}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username} deadline={item.deadline} />
                                         <button
                                             className="button-block"
                                             onClick={() => takeCheck(item.id)}>
@@ -398,7 +401,7 @@ export default function TasksPage() {
 
                                 doneTasks.map(item => (
                                     <div className="task" key={item.id}>
-                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username} deadline={item.deadline}/>
+                                        <TaskCard title={item.title} description={item.description} username={item.username} created_at={item.created_at} checker_username={item.checker_username} deadline={item.deadline} />
                                         <div className="button-block">
                                             <button
                                                 onClick={() => handleStatusChange(item.id, 'in-progress')}
