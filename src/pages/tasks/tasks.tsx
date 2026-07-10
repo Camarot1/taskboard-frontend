@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import './tasks.scss'
 import { useNavigate } from 'react-router-dom'
 import { usersData, deleteToken, getToken } from '../token'
+import { useTheme } from "../../theme"
 
 interface Task {
     id: number;
@@ -48,7 +49,7 @@ const formatDate = (dateString: string): string => {
 }
 
 export default function TasksPage() {
-
+    const { theme } = useTheme()
     const [loading, setLoading] = useState<boolean>(true)
     const [tasks, setTasks] = useState<Task[]>([])
     const [updatingTaskId, setUpdatingTaskId] = useState<number | null>(null)
@@ -281,13 +282,13 @@ export default function TasksPage() {
                 <p className="name">Имя добавившего: {username}</p>
                 <p className="created_at">Создано: {formatDate(created_at)}</p>
                 <p className="created_at">Задача до: {formatDate(deadline)}</p>
-                {checker_username && <p>Проверяющий : {checker_username || 'Проверяющего нет'}</p>}
+                {checker_username && <p className="name">Проверяющий : {checker_username || 'Проверяющего нет'}</p>}
             </div>
         )
     }
 
     return (
-        <main className='main-page'>
+        <main className={`main-page tasks-page-${theme}`}>
             <div className="main__container">
                 <h1 className="main__title">Задачи</h1>
                 <div className="main__nick">Ваш никнейм: {userData?.login}</div>
@@ -311,7 +312,7 @@ export default function TasksPage() {
                         <p className="column__title">To-Do</p>
                         <div className="tasks">
                             {todoTasks.length === 0 ? (
-                                <div>Нет задач</div>
+                                <div style={{ color: theme === "white" ? 'black' : 'white' }}>Нет задач</div>
                             ) : (
                                 todoTasks.map(item => (
                                     <div className="task" key={item.id}>
@@ -333,7 +334,7 @@ export default function TasksPage() {
                         <p className="column__title">In Progress</p>
                         <div className="tasks">
                             {inProgressTasks.length === 0 ? (
-                                <div>Нет задач</div>
+                                <div style={{ color: theme === "white" ? 'black' : 'white' }}>Нет задач</div>
                             ) : (
                                 inProgressTasks.map(item => (
                                     <div className="task" key={item.id}>
@@ -362,7 +363,7 @@ export default function TasksPage() {
                         <p className="column__title">Check</p>
                         <div className="tasks">
                             {check.length === 0 ? (
-                                <div>Нет задач</div>
+                               <div style={{ color: theme === "white" ? 'black' : 'white' }}>Нет задач</div>
                             ) : (
                                 check.map(item => (
                                     <div className="task" key={item.id}>
@@ -396,7 +397,7 @@ export default function TasksPage() {
                         <p className="column__title">Done</p>
                         <div className="tasks">
                             {doneTasks.length === 0 ? (
-                                <div>Нет задач</div>
+                                <div style={{ color: theme === "white" ? 'black' : 'white' }}>Нет задач</div>
                             ) : (
 
                                 doneTasks.map(item => (

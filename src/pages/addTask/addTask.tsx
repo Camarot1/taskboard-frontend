@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './addTask.scss'
 import { usersData } from '../token'
+import { useTheme } from '../../theme'
 
 interface FormData {
     name: string;
@@ -25,6 +26,7 @@ interface Companies {
 
 
 export default function AddTask() {
+    const {theme} = useTheme()
     const navigate = useNavigate()
 
     const [userData, setUserData] = useState<UserData>({
@@ -123,6 +125,8 @@ export default function AddTask() {
             }
 
             alert('Задача добавлена')
+
+            navigate('/tasks')
         } catch (error) {
             console.error('Ошибка при добавлении задачи:', error)
             alert('Не удалось добавить задачу')
@@ -142,7 +146,7 @@ export default function AddTask() {
     }
 
     return (
-        <main className="addTask-page">
+        <main className={`addTask-page addTask-page-${theme}`}>
             <div className="main__container">
                 <h1 className="main__title">Добавить задачу</h1>
                 <form className="main__form" onSubmit={handleAddTask}>

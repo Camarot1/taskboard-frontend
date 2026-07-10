@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './login.scss'
 import { setToken } from "../token"
+import { useTheme } from '../../theme'
 
 interface Data {
     login: string;
@@ -19,6 +20,7 @@ token: string;
 }
 
 export default function Login() {
+    const {theme} = useTheme()
     const navigate = useNavigate()
     const [Data, setData] = useState<Data>({
         login: '',
@@ -62,7 +64,7 @@ export default function Login() {
     }
 
     return (
-        <main className="login-page login-page-white">
+        <main className={`login-page-${theme} login-page`}>
             <div className="main__container container">
                 <form className="main__form" onSubmit={
                     Login

@@ -93,3 +93,12 @@ li {
 a {
   text-decoration: none;
 }
+
+@media (max-width: 768px){
+  .header-white, .header-black{
+    .header__container{
+      flex-direction: column;
+      height: auto;
+    }
+  }
+}

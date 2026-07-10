@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import './edit-task.scss'
+import { useTheme } from "../../theme";
 
 interface UpdateData {
     title: string;
@@ -21,6 +22,7 @@ interface Task {
 }
 
 export default function EditTask() {
+    const {theme} = useTheme()
     const { id } = useParams()
     const [updateData, setUpdateData] = useState<UpdateData>({
         title: '',
@@ -73,7 +75,7 @@ export default function EditTask() {
     }
 
     return (
-        <main className="editTask-page">
+        <main className={`editTask-page editTask-page-${theme}`}>
             <div className="main__container">
                 <form className="main__form" onSubmit={fetchData}>
                     <div className="form__block">
