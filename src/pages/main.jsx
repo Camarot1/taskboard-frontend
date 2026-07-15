@@ -7,6 +7,6 @@ export default function MainPage(){
         navigate("/tasks")
     }, [navigate])
     return(
-        <div>Редирект</div>
+        <div>Редирект. Подождите.</div>
     )
 }

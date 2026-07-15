@@ -229,6 +229,30 @@ export default function TasksPage() {
         }
     }
 
+    const deleteTask = async (taskId: number): Promise<void> => {
+        if (!window.confirm("Вы уверенны что хотите удалить задачу?")) {
+            return
+        }
+        if (!userData) {
+            throw new Error('Not userData')
+        }
+        const token = getToken()
+        const response = await fetch(`${process.env.REACT_APP_URL}/tasks/delete/${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const res = await response.json()
+
+        if (selectedCompany === 'my-tasks' || !selectedCompany) {
+            await fetchTask(userData.id)
+        } else {
+            await takeTask(selectedCompany)
+        }
+    }
+
     const takeCheck = async (taskId: number): Promise<void> => {
         if (!window.confirm("Вы уверенны что хотите взять задачу на проверку?")) {
             return
@@ -324,6 +348,7 @@ export default function TasksPage() {
                                             {updatingTaskId === item.id ? 'Обновление...' : 'Взять в работу'}
                                         </button>
                                         <button className="button-block red" onClick={() => redirectEdit(item.id)}>Редактировать</button>
+                                        <button className="button-block red" onClick={() => deleteTask(item.id)}>Удалить</button>
                                     </div>
                                 ))
                             )}</div>
@@ -363,7 +388,7 @@ export default function TasksPage() {
                         <p className="column__title">Check</p>
                         <div className="tasks">
                             {check.length === 0 ? (
-                               <div style={{ color: theme === "white" ? 'black' : 'white' }}>Нет задач</div>
+                                <div style={{ color: theme === "white" ? 'black' : 'white' }}>Нет задач</div>
                             ) : (
                                 check.map(item => (
                                     <div className="task" key={item.id}>
